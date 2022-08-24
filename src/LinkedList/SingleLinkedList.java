@@ -14,7 +14,7 @@ public class SingleLinkedList {
         }
     }
 
-    public void displayLinkedList(LinkedNode head){
+    public void displayLinkedList(){
         LinkedNode current = head;
         while (current != null){
             System.out.print(current.data + "--->");
@@ -204,27 +204,84 @@ public class SingleLinkedList {
         previous.next = current.next;
     }
 
+    //Detection of loop in linked list
+    public void checkLoop(LinkedNode head){
+        LinkedNode fastPtr = head;
+        LinkedNode slowPtr = head;
+        while (fastPtr != null && fastPtr.next != null){
+            fastPtr = fastPtr.next.next;
+            slowPtr = slowPtr.next;
+            if (slowPtr == fastPtr){
+                removeloop(slowPtr, head);
+                return;
+            }
+        }
+        return;
+    }
+
+    public LinkedNode loopStart(LinkedNode slowPtr, LinkedNode head){
+        LinkedNode temp = head;
+        while (slowPtr != temp){
+            temp = temp.next;
+            slowPtr = slowPtr.next;
+        }
+        return temp;
+    }
+
+    public void removeloop(LinkedNode slowPtr, LinkedNode head){
+        LinkedNode temp = head;
+        while(slowPtr.next != temp.next){
+            temp = temp.next;
+            slowPtr = slowPtr.next;
+        }
+        slowPtr.next = null;
+    }
+
+    //Merge Two sorted Linked List
+    public LinkedNode merge(SingleLinkedList One, SingleLinkedList Two){
+        LinkedNode a = One.head;
+        LinkedNode b = Two.head;
+
+        LinkedNode temp = new LinkedNode(0);
+        LinkedNode tail = temp;
+
+        while(a != null && b != null){
+            if (a.data <= b.data){
+                tail.next = a;
+                a = a.next;
+            }else{
+                tail.next = b;
+                b = b.next;
+            }
+        }
+        if (a == null){
+            tail.next = b;
+        }else{
+            tail.next = a;
+        }
+        return temp.next;
+    }
+
     public static void main(String[] args){
 
+        //Initializing Nodes
         SingleLinkedList SLL = new SingleLinkedList();
         SLL.head = new LinkedNode(1);
-        LinkedNode second = new LinkedNode(2);
-        LinkedNode third = new LinkedNode(3);
-        LinkedNode temp = new LinkedNode(3);
-        LinkedNode fourth = new LinkedNode(4);
-        LinkedNode fifth = new LinkedNode(5);
+        LinkedNode second = new LinkedNode(5);
+        LinkedNode third = new LinkedNode(10);
+        LinkedNode temp = new LinkedNode(15);
+        LinkedNode fourth = new LinkedNode(20);
+        LinkedNode fifth = new LinkedNode(25);
 
         //Linking nodes together
-
         head.next = second;
         second.next = third;
         third.next = temp;
         temp.next = fourth;
         fourth.next = fifth;
 
+        //Performing Operations
+        SLL.displayLinkedList();
 
-        SLL.displayLinkedList(head);
-        SLL.removewithkey(head, 3);
-        SLL.displayLinkedList(head);
     }
 }
